@@ -1,0 +1,5 @@
+.spyproject
+__pycache__
+/FEMTOBearing/Data
+/FEMTOBearing/pkl
+model_building.py
