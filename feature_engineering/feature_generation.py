@@ -3,12 +3,15 @@ import pandas as pd
 from scipy.fft import fft, fftfreq
 
 
-def get_featured_df(df, sampling_freq, n_top_freq=5):
+def get_featured_df(df, sampling_freq=None, n_top_freq=None):
     feature_df = pd.DataFrame()
     feature_df = __get_timedomain_feature(df)
-    feature_df = pd.concat([feature_df,
-                            __get_freqdomain_feature(df, sampling_freq, n_top_freq)],
-                           axis=1)
+    # sampling frequency and number of top frequency are needed 
+    # for generating feature in frequency domain
+    if sampling_freq and n_top_freq:
+        feature_df = pd.concat([feature_df,
+                                __get_freqdomain_feature(df, sampling_freq, n_top_freq)],
+                               axis=1)
     return feature_df
 
 
