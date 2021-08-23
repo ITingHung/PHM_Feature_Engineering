@@ -3,21 +3,27 @@ import pandas as pd
 from scipy.fft import fft, fftfreq
 
 
-def get_featured_df(df, sampling_freq=None, n_top_freq=None):
+def get_featured_df(df, window_size=None, sampling_freq=None, n_top_freq=None):
     feature_df = pd.DataFrame()
-    feature_df = __get_timedomain_feature(df)
     # sampling frequency and number of top frequency are needed 
-    # for generating feature in frequency domain
+    # for generating features in frequency domain
     if sampling_freq and n_top_freq:
-        feature_df = pd.concat([feature_df,
-                                __get_freqdomain_feature(df, sampling_freq, n_top_freq)],
+        feature_df = __get_freqdomain_feature(df, sampling_freq, n_top_freq)
+        # set window size for time domain feature equal to 
+        # window size for frequency domain feature (where window size = length of df)
+        window_size = len(df)
+    
+    # window size is needed for generating feature in time domain 
+    if window_size:
+        feature_df = pd.concat([feature_df, __get_timedomain_feature(df, window_size)],
                                axis=1)
+    else: 
+        print('Please provide window size (number of samples) for generating features in time domain')
     return feature_df
 
 
-def __get_timedomain_feature(df):
-    window_size = len(df)
-    
+def __get_timedomain_feature(df, window_size):
+
     # get rolling mean
     avg = df.rolling(window_size, center=True).mean()
     avg.columns = [f'avg_{col}' for col in df.columns]
