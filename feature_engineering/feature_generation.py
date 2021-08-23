@@ -67,8 +67,12 @@ def __get_timedomain_feature(df, window_size):
     imp = pd.DataFrame(peak.values/avg.values)
     imp.columns = [f'imp_{col}' for col in df.columns] 
     
-    time_feature = pd.concat([avg, std, peak, rms, skew, 
-                              kurt, crest, clear, shape, imp], 
+    # get the rollinng coefficient of variation
+    cv = pd.DataFrame(std.values/avg.values)
+    cv.columns = [f'cv_{col}' for col in df.columns] 
+    
+    time_feature = pd.concat([avg, std, peak, rms, skew, kurt, 
+                              crest, clear, shape, imp, cv], 
                              axis=1).dropna().reset_index(drop=True)
     return time_feature
 
