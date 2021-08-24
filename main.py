@@ -1,6 +1,6 @@
 import pandas as pd
 
-from FEMTOBearing._save_load_pkl import save_pkl, load_pkl
+from FEMTOBearing import save_pkl, load_pkl
 from feature_engineering import feature_generation as fg
 
 
